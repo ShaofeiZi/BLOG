@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>RxJS实践，Vue如何集成RxJS · ShaofeiZi Blog · 做个日常记录</title>
+    <meta name="description" content="訾绍飞的博客。万物皆有裂缝处，那是光射进来的地方。">
+    <link rel="shortcut icon" href="/BLOG/favicon.ico">
+  <link rel="manifest" href="/BLOG/manifest.json">
+  <meta name="theme-color" content="#3F51B5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="/BLOG/icons/192.png">
+  <link rel="mask-icon" href="/BLOG/icons/safari-pinned-tab.svg" color="#3eaf7c">
+  <meta name="msapplication-TileImage" content="/icons/192.png">
+  <meta name="msapplication-TileColor" content="#3F51B5">
+    
+    <link rel="preload" href="/BLOG/assets/css/styles.0f06c689.css" as="style"><link rel="preload" href="/BLOG/assets/js/app.0f06c689.js" as="script"><link rel="preload" href="/BLOG/assets/js/12.e9c56306.js" as="script"><link rel="prefetch" href="/BLOG/assets/js/1.63593f8f.js"><link rel="prefetch" href="/BLOG/assets/js/10.fdd39873.js"><link rel="prefetch" href="/BLOG/assets/js/11.8a622b5e.js"><link rel="prefetch" href="/BLOG/assets/js/13.20e44605.js"><link rel="prefetch" href="/BLOG/assets/js/14.eb804906.js"><link rel="prefetch" href="/BLOG/assets/js/15.47582e90.js"><link rel="prefetch" href="/BLOG/assets/js/16.0861cf41.js"><link rel="prefetch" href="/BLOG/assets/js/17.417e8e0e.js"><link rel="prefetch" href="/BLOG/assets/js/18.2318cd37.js"><link rel="prefetch" href="/BLOG/assets/js/19.997f9e1c.js"><link rel="prefetch" href="/BLOG/assets/js/2.73ec8147.js"><link rel="prefetch" href="/BLOG/assets/js/20.a8cf0c8f.js"><link rel="prefetch" href="/BLOG/assets/js/21.88823ca0.js"><link rel="prefetch" href="/BLOG/assets/js/22.a2e20a79.js"><link rel="prefetch" href="/BLOG/assets/js/23.e7d1e135.js"><link rel="prefetch" href="/BLOG/assets/js/24.492e8390.js"><link rel="prefetch" href="/BLOG/assets/js/25.b31904c7.js"><link rel="prefetch" href="/BLOG/assets/js/26.36e1cf84.js"><link rel="prefetch" href="/BLOG/assets/js/27.94b05a58.js"><link rel="prefetch" href="/BLOG/assets/js/28.bdcf9b24.js"><link rel="prefetch" href="/BLOG/assets/js/29.e41d34d2.js"><link rel="prefetch" href="/BLOG/assets/js/3.a4d6da98.js"><link rel="prefetch" href="/BLOG/assets/js/30.ba1f5d39.js"><link rel="prefetch" href="/BLOG/assets/js/31.2bd2d3d8.js"><link rel="prefetch" href="/BLOG/assets/js/32.824499f7.js"><link rel="prefetch" href="/BLOG/assets/js/33.58645df0.js"><link rel="prefetch" href="/BLOG/assets/js/34.334e4a83.js"><link rel="prefetch" href="/BLOG/assets/js/35.aa96d72d.js"><link rel="prefetch" href="/BLOG/assets/js/36.40c509d3.js"><link rel="prefetch" href="/BLOG/assets/js/37.829377f5.js"><link rel="prefetch" href="/BLOG/assets/js/38.3b15ddc7.js"><link rel="prefetch" href="/BLOG/assets/js/39.87218167.js"><link rel="prefetch" href="/BLOG/assets/js/4.c66c6308.js"><link rel="prefetch" href="/BLOG/assets/js/40.63562db5.js"><link rel="prefetch" href="/BLOG/assets/js/41.168fcabb.js"><link rel="prefetch" href="/BLOG/assets/js/42.e8f3ecd2.js"><link rel="prefetch" href="/BLOG/assets/js/43.5eb65461.js"><link rel="prefetch" href="/BLOG/assets/js/44.41e08b42.js"><link rel="prefetch" href="/BLOG/assets/js/45.54b7df8d.js"><link rel="prefetch" href="/BLOG/assets/js/46.0a0de71e.js"><link rel="prefetch" href="/BLOG/assets/js/47.bd587f67.js"><link rel="prefetch" href="/BLOG/assets/js/48.f3af8d7e.js"><link rel="prefetch" href="/BLOG/assets/js/49.483980fa.js"><link rel="prefetch" href="/BLOG/assets/js/5.05c034ec.js"><link rel="prefetch" href="/BLOG/assets/js/50.f814132b.js"><link rel="prefetch" href="/BLOG/assets/js/51.477c87bb.js"><link rel="prefetch" href="/BLOG/assets/js/52.55f963c5.js"><link rel="prefetch" href="/BLOG/assets/js/53.9eafd57f.js"><link rel="prefetch" href="/BLOG/assets/js/54.be1ba528.js"><link rel="prefetch" href="/BLOG/assets/js/55.a0ef8049.js"><link rel="prefetch" href="/BLOG/assets/js/56.8e8dca35.js"><link rel="prefetch" href="/BLOG/assets/js/6.f61c2d7b.js"><link rel="prefetch" href="/BLOG/assets/js/7.acadab6a.js"><link rel="prefetch" href="/BLOG/assets/js/8.8d991ea8.js"><link rel="prefetch" href="/BLOG/assets/js/9.efa09c0d.js">
+    <link rel="stylesheet" href="/BLOG/assets/css/styles.0f06c689.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div data-app="true" id="app" class="application theme--light"><div class="application--wrap"><div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" class="v-progress-linear blog-progress" style="height:3px;display:none;"><div class="v-progress-linear__background accent" style="height:3px;opacity:0.4;width:100%;"></div><div class="v-progress-linear__bar"><!----><div class="v-progress-linear__bar__determinate accent" style="width:0%;"></div></div></div><aside class="v-navigation-drawer v-navigation-drawer--close v-navigation-drawer--fixed v-navigation-drawer--is-mobile theme--light" style="height:100%;margin-top:0px;transform:translateX(-240px);width:240px;"><div><div class="aside-brand-wrap"><div class="aside-brand"><a href="/BLOG/" class="aside-avatar elevation-2 router-link-active"><img src="/BLOG/face.png" alt="avatar"></a><hgroup class="mt-3 variant-hide"><div class="subheading white--text">訾绍飞</div><a href="mailto:zishaofei221@gmail.com" title="zishaofei221@gmail.com" class="aside-mail primary--text text--lighten-5">zishaofei221@gmail.com</a></hgroup></div></div><hr class="v-divider theme--dark"><div role="list" class="v-list nav-list theme--light"><div role="listitem"><a href="/BLOG/" class="v-list__tile v-list__tile--link theme--light"><div class="v-list__tile__avatar"><div class="v-avatar" style="height:40px;width:40px;"><i class="fa fa-home"></i></div></div><div class="v-list__tile__content">首页</div></a></div><div role="listitem"><a href="/BLOG/tags" class="v-list__tile v-list__tile--link theme--light"><div class="v-list__tile__avatar"><div class="v-avatar" style="height:40px;width:40px;"><i class="fa fa-tag"></i></div></div><div class="v-list__tile__content">标签</div></a></div><div role="listitem"><a href="https://github.com/ShaofeiZi" target="_blank" class="v-list__tile v-list__tile--link theme--light"><div class="v-list__tile__avatar"><div class="v-avatar" style="height:40px;width:40px;"><i class="fab fa-github"></i></div></div><div class="v-list__tile__content">Github</div></a></div><div role="listitem"><a href="/BLOG/about" class="v-list__tile v-list__tile--link theme--light"><div class="v-list__tile__avatar"><div class="v-avatar" style="height:40px;width:40px;"><i class="fa fa-user-secret"></i></div></div><div class="v-list__tile__content">About</div></a></div></div></div><div class="v-navigation-drawer__border"></div></aside><nav class="blog-toolbar v-toolbar v-toolbar--fixed theme--dark primary" style="margin-top:0px;padding-right:0px;padding-left:0px;transform:translateY(0px);"><div class="v-toolbar__content" style="height:56px;"><button type="button" class="v-btn v-btn--icon theme--dark"><div class="v-btn__content"><i class="fa fa-bars"></i></div></button><div class="v-toolbar__title">RxJS实践，Vue如何集成RxJS</div><div class="spacer"></div><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""><!----></div><div class="v-menu v-menu--inline" style="display:none;"><div class="v-menu__activator"><button type="button" class="v-btn v-btn--icon theme--dark"><div class="v-btn__content"><i class="fa fa-share-alt"></i></div></button></div><div class="v-menu__content theme--light " style="max-height:auto;min-width:0px;max-width:auto;top:12px;left:0px;transform-origin:top right;z-index:0;display:none;"><div role="list" class="v-list theme--light"><div role="listitem"><a class="v-list__tile v-list__tile--link theme--light"><div class="v-list__tile__avatar"><div class="v-avatar" style="height:40px;width:40px;"><i class="fa fa-lg fa-copy"></i></div></div><div class="v-list__tile__title">复制链接</div></a></div></div><input type="text" tabindex="-1" aria-hidden="true" value="" class="fake-hide"></div></div></div></nav><main class="v-content" style="padding-top:56px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><div class="v-content__wrap"><div class="container blog-container grid-list-xl align-center"><div class="layout row wrap"><div class="flex mb-3 xs12"><article class="v-card v-sheet theme--light elevation-16 post-card"><div class="v-card__title"><div class="flex xs12"><h2 class="display-1 mb-3">RxJS实践，Vue如何集成RxJS</h2><div class="post-meta"><time datetime="2018-07-04T01:41:21.000Z" class="secondary--text post-time">2018年07月04日</time></div></div></div><div class="v-card__text pt-0 pb-0"><div class="flex xs12"><div class="content custom"><p>本文章不会对RxJS的原理进行讲解，仅讨论如何在vue中对RxJS进行集成
+</p><p><a href="https://shaofeizi.github.io/BLOG/tags/RXJS/" target="_blank" rel="noopener noreferrer">关于RXJS的几篇</a></p><p><a href="https://github.com/RxJS-CN/RxJS-Docs-CN" target="_blank" rel="noopener noreferrer">RxJS 5 中文文档</a></p><p><a href="https://rxjs-cn.github.io/rxjs5-ultimate-cn/" target="_blank" rel="noopener noreferrer">RxJS 5 ultimate 中文版</a></p><h1 id="vue简单集成rxjs"><a href="#vue简单集成rxjs" aria-hidden="true" class="header-anchor">#</a> Vue简单集成RxJS</h1><p>想要在Vue中使用RxJS，只需要如下引用即可，当然，更多引用方法可以参考官方文档，比如按需引入</p><pre class="language-javascript"><code><span class="token keyword">import</span> Rx <span class="token keyword">from</span> <span class="token string">'rxjs/Rx'</span>
+ <span class="token comment">// 如果你想在vue中使用RxJS的体验更好，这里推荐使用vue-rx这个官方维护的库，使用如下：</span>
+<span class="token keyword">import</span> Vue <span class="token keyword">from</span> <span class="token string">'vue'</span>
+<span class="token keyword">import</span> VueRx <span class="token keyword">from</span> <span class="token string">'vue-rx'</span>
+<span class="token keyword">import</span> Rx <span class="token keyword">from</span> <span class="token string">'rxjs/Rx'</span>
+
+Vue<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>VueRx<span class="token punctuation">,</span> Rx<span class="token punctuation">)</span>
+
+</code></pre><p>这样，在Vue实例当中就会多了subscriptions这个钩子函数，他的用法类似data，使用如下所示：</p><pre class="language-vue"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">&gt;</span></span>姓名：{{ name$ }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">&gt;</span></span>年龄：{{ age$ }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name"><span class="token namespace">v-stream:</span>click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>setName$<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>点击设置name的值<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+    domStreams<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">'setName$'</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token function">subscriptions</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            age$<span class="token operator">:</span> Rx<span class="token punctuation">.</span>Observable<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">23</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">data</span> <span class="token operator">=&gt;</span> data<span class="token punctuation">)</span><span class="token punctuation">,</span>
+            name$<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>setName$
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">e</span> <span class="token operator">=&gt;</span> <span class="token string">'myName'</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">startWith</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+</code></pre><p>如上所示，Rx.Observable.of(23)在被订阅时会被发出值23，this.setName$则是一个流事件，它在domStreams中定义，实际它是一个Subject（具体可查阅RxJS中对Subject的定义），在用户点击按钮的时候则会发出该点击源的数据，如上图的map operator中，会接收数据源发出的event对象（这里我们没有使用该对象，仅仅是返回一个我们定义的字符串'myName'），startWith则是初始化name$的值为空字符串，这里vue-rx已经帮我们做了一个隐式的subscribe绑定，所以值23会马上发出最后赋值到age$上，进而绑定到视图，在这里，我们可以把age$与name$看成是一个有数据源发出的可观察流的结果，这条流是响应的，初始发出的值会经过各种operator处理后响应到页面上。</p><h1 id="集成vue-rx后使用rxjs"><a href="#集成vue-rx后使用rxjs" aria-hidden="true" class="header-anchor">#</a> 集成vue-rx后使用RxJS</h1><p><a href="https://github.com/ShaofeiZi/vue-rxjs-demo" target="_blank" rel="noopener noreferrer">集成后demo</a></p><p>该项目采取了parcel构建、示例包括原生使用与集成vue-rx后使用的对比、事件如何使用、以及常用operator的示例（包含switchMap、concatMap、exhaustMap等的使用场景选择）</p><h2 id="创建observeble"><a href="#创建observeble" aria-hidden="true" class="header-anchor">#</a> 创建Observeble</h2><pre class="language-text"><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;h3&gt;demo2 创建将数据转化成Observable方式&lt;/h3&gt;
+    &lt;p&gt;字符串：{{ str$ }}&lt;/p&gt;
+    &lt;p&gt;
+      数组: 
+      &lt;span v-for=&quot;(num, index) in arr$&quot; :key=&quot;index&quot;&gt;{{ num }}&lt;/span&gt;
+    &lt;/p&gt;
+    &lt;p&gt;对象：{{ obj$.a }}&lt;/p&gt;
+    &lt;p&gt;布尔值：{{ bool$ }}&lt;/p&gt;
+    &lt;p&gt;promise：{{ promise$ }}&lt;/p&gt;
+    &lt;p&gt;interval: {{ interval$ }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import Rx from 'rxjs/Rx'
+
+export default {
+  subscriptions () {
+    return {
+      /**
+       * 普通数据类型都可以用of进行转换
+       * promise对象可用from或者fromPromise
+       * interval可在给定时间区间内发出自增数字
+       */
+      str$: Rx.Observable.of('str'),
+      arr$: Rx.Observable.of([1, 2, 3]),
+      obj$: Rx.Observable.of({ 
+        a: 'test-obj' 
+      }),
+      bool$: Rx.Observable.of(true),
+      promise$: Rx.Observable.fromPromise(this.getPromise()),
+      interval$: Rx.Observable.interval(1000)
+    }
+  },
+  methods: {
+    getPromise () {
+      return new Promise((resolve, reject) =&gt; {
+        setTimeout(() =&gt; {
+          resolve('promise')
+        }, 1000)
+      })
+    }
+  }
+}
+&lt;/script&gt;
+
+</code></pre><p>创建数据流后，用法类似data，可将数据流的结果跟视图进行绑定</p><h2 id="事件的使用"><a href="#事件的使用" aria-hidden="true" class="header-anchor">#</a> 事件的使用</h2><h3 id="没有集成vue-rx"><a href="#没有集成vue-rx" aria-hidden="true" class="header-anchor">#</a> 没有集成vue-rx</h3><pre class="language-text"><code>export default {
+  ...
+
+  // 需要获取dom，所以必须是mounted后执行才能成功
+  mounted () {
+    // fromEvent可以将dom绑定事件并转化成Observable可观察对象
+    Rx.Observable.fromEvent(this.$refs['btn'], 'click')
+      .subscribe(e =&gt; {
+        this.data = '成功获取data'
+      })
+  },
+
+  ... 
+}
+
+
+</code></pre><h3 id="集成vue-rx后"><a href="#集成vue-rx后" aria-hidden="true" class="header-anchor">#</a> 集成vue-rx后</h3><pre class="language-text"><code>&lt;template&gt;
+  &lt;button class=&quot;btn&quot; v-stream:click=&quot;getData$&quot;&gt;点击获取数据&lt;/button&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  ...
+
+  // v-stream事件可以统一写在这里，具体可以看vue-rx的使用
+  domStreams: [
+    'getData$'
+  ],
+  subscriptions () {
+    return {
+      data$: this.getData$
+        // map操作符主要用于映射数据，这里我们直接返回了一个字符串
+        .map(e =&gt; {
+          return '成功获取data'
+        })
+    }
+  }
+}
+&lt;/script&gt;
+
+</code></pre><h2 id="switchmap、concatmap、exhaustmap使用"><a href="#switchmap、concatmap、exhaustmap使用" aria-hidden="true" class="header-anchor">#</a> switchMap、concatMap、exhaustMap使用</h2><p>一般这几个operator，会与http请求结合使用，下面我们看些简单用法，点击后将当前流映射成新的流</p><pre class="language-text"><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;h3&gt;demo4 各种map方法运用&lt;/h3&gt;
+    &lt;button class=&quot;btn&quot; v-stream:click=&quot;getConcatMapCount$&quot;&gt;点击获取concatMapCount$&lt;/button&gt;
+    &lt;p&gt;{{ concatMapCount$ }}&lt;/p&gt;
+    &lt;button class=&quot;btn&quot; v-stream:click=&quot;getSwitchMapCount$&quot;&gt;点击获取switchMapCount$&lt;/button&gt;
+    &lt;p&gt;{{ switchMapCount$ }}&lt;/p&gt;
+    &lt;button class=&quot;btn&quot; v-stream:click=&quot;getExhaustMapCount$&quot;&gt;点击获取exhaustMapCount$&lt;/button&gt;
+    &lt;p&gt;{{ exhaustMapCount$ }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import Rx from 'rxjs/Rx'
+
+export default {
+  data () {
+    return {
+      count: 0
+    }
+  },
+  domStreams: [
+    'getConcatMapCount$',
+    'getSwitchMapCount$',
+    'getExhaustMapCount$'
+  ],
+  subscriptions () {
+    /**
+     * 下面的operator会把一个Observable转化成另外一个Observable
+     * 通过返回一个观察流继续处理数据
+     */
+    return {
+      /**
+       * 当你连续点击按钮多次获取数据时，cancatMap会将获取到的数据按队列发出
+       */
+      concatMapCount$: this.getConcatMapCount$
+        .concatMap((e) =&gt; {
+          return Rx.Observable.from(this.getCount())
+        }),
+      /**
+       * 当你连续点击按钮多次获取数据时，switchMap只会将最后一个点击发出的值发出，前面发出的值会被吞掉
+       */
+      switchMapCount$: this.getSwitchMapCount$
+        .switchMap((e) =&gt; {
+          return Rx.Observable.from(this.getCount())
+        }),
+      /**
+       * 当你连续点击按钮多次时，exhaustMap仅执行一次，在第一次值发出后，才可以继续点击下一次发出值
+       */
+      exhaustMapCount$: this.getExhaustMapCount$
+        .exhaustMap(e =&gt; {
+          return Rx.Observable.from(this.getCount())
+        })
+    }
+  },
+  methods: {
+    getCount () {
+      return new Promise((resolve, reject) =&gt; {
+        this.count++
+        setTimeout(() =&gt; {
+          resolve(this.count)
+        }, 2000)
+      })
+    }
+  }
+}
+&lt;/script&gt;
+
+</code></pre><p>上面的getCount当成是2秒后响应的http请求，当你连续点击的时候，这几个map operator会有不一样的行为。</p><ul><li>concatMap在多次点击后会每隔两秒就发送一个递增的count</li><li>switchMap在多次点击后，会只发出最后一次点击的count，比如我点了3次，switchMapCount$在2秒后会显示3，而不是1.</li><li>exhaustMap则是第一次点击没有响应前不会执行后续的点击操作，直到响应后的点击才有效。</li></ul><h1 id="关于rx5与rx6"><a href="#关于rx5与rx6" aria-hidden="true" class="header-anchor">#</a> 关于Rx5与Rx6</h1><p>上面的仓库是基于Rx5编写的示例，而新出的Rx6在api上有些变动，调用operator的方式不再是链式调用，而是通过传入pipe operator进行组合使用，还有Observable对象的引用也发生了改变，具体可以参考官方文档</p><p><a href="http://rxjsdocs.com" target="_blank" rel="noopener noreferrer">RXJS6 官网</a></p></div></div></div><div class="v-card__actions"><div class="flex xs12"><a href="/BLOG/tags/VUE"><span tabindex="0" class="v-chip capitalize chip-tag v-chip--label v-chip--small theme--light"><span class="v-chip__content">VUE</span></span></a><a href="/BLOG/tags/RxJS"><span tabindex="0" class="v-chip capitalize chip-tag v-chip--label v-chip--small theme--light"><span class="v-chip__content">RxJS</span></span></a><a href="/BLOG/tags/vue-rx"><span tabindex="0" class="v-chip capitalize chip-tag v-chip--label v-chip--small theme--light"><span class="v-chip__content">vue-rx</span></span></a></div></div></article></div><div class="flex text-xs-left xs6"><a href="/BLOG/posts/XMLHTTPRequest.html" class="post-nav v-btn v-btn--flat v-btn--router theme--light"><div class="v-btn__content"><div class="grey--text"><i class="fa mr-1 fa-chevron-left"></i>Prev</div><div class="title mt-1 primary--text hidden-xs-only">ajax 原理与封装</div></div></a></div><div class="flex text-xs-right xs6"><a href="/BLOG/posts/angular_concept.html" class="post-nav v-btn v-btn--flat v-btn--router theme--light"><div class="v-btn__content"><div class="grey--text">Next
+          <i class="fa ml-1 fa-chevron-right"></i></div><div class="title mt-1 primary--text hidden-xs-only">angula重要概念</div></div></a></div><div class="flex mt-3 xs12"><div class="v-card v-sheet theme--light"><div class="v-card__title"><span class="headline">Comment</span></div></div></div></div></div><footer class="v-footer blog-footer darken-1 mt-3 theme--dark" style="height:auto;"><div class="primary--text text--lighten-4 text-xs-center py-3 card-cont v-card v-card--flat v-sheet v-sheet--tile theme--dark primary"><div class="v-card__text pb-0">博客内容遵循 <a rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></div><div class="v-card__text pt-0 mt-1"><span>訾绍飞 © 2015 - 2020</span><span><!---->
+        Power by
+        <a href="https://vuepress.vuejs.org" target="_blank" rel="noopener noreferrer">VuePress</a> Theme
+        <a href="https://github.com/ShaofeiZi/BLOG" target="_blank" rel="noopener noreferrer">indigo</a></span></div></div></footer></div></main><button type="button" class="v-btn v-btn--bottom v-btn--floating v-btn--fixed v-btn--right theme--light accent" style="display:none;"><div class="v-btn__content"><i class="fa fa-lg fa-chevron-up"></i></div></button></div></div></div>
+    <script src="/BLOG/assets/js/app.0f06c689.js" defer></script><script src="/BLOG/assets/js/12.e9c56306.js" defer></script>
+  </body>
+</html>
